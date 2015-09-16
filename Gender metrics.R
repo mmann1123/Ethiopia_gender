@@ -39,12 +39,14 @@ library(rgdal)
       
       name = tifs[i]
       raster = raster(paste('Data to Extract',tifs[i],sep='/'))      
-      windows()
-      plot(raster)
-      plot(data,add=T, col='red')
+      #windows()
+      #plot(raster)
+      #plot(data,add=T, col='red')
+      res = res(raster)[1]*res(raster)[2]*0.0001  # convert resolution to hectares
       ext_values = extract(raster,data,fun= function(x){mean(x,na.rm=T)},df=T,buffer=56.41,small=T)
       names(ext_values)=c('id','values')
       data[[paste(name)]] =ext_values[,2]
+      data[[paste('res_hect_',name,sep='')]]= res
     }  
     
 write.csv(data@data,'ET_gender_stats.csv')    
